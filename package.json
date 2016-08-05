@@ -1,0 +1,19 @@
+{
+  "name": "tetris",
+  "version": "1.0.0",
+  "description": "Tetris game ",
+  "main": "game.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raja3233/tetris.git"
+  },
+  "author": "RSI",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/raja3233/tetris/issues"
+  },
+  "homepage": "https://github.com/raja3233/tetris#readme"
+}
