@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tetris Game</title>
+		<script   src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous">
+		</script>
+		<style>
+			table{
+				border : 5px solid #e6e6e6;
+				border-collapse: collapse;
+				border-spacing: 0px;
+				overflow: hidden;
+				height:450px;
+				background-color: #575760;
+
+				
+			}
+			
+			td {
+				border : 1px solid #e6e6e6;
+				
+				padding:3px;
+			}
+			input[name ='start']{
+				z-index: 1;
+				position:absolute;
+				top:50%;
+				left:15%;
+				width :200px;
+				height:30px;
+				background-color: yellow;
+				font-family:'Serf';
+				font-size:20px;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<input type = "Button" name = 'start' value = "StartGame">
+		<script>
+			(function (xSize, ySize){
+				var body = document.getElementsByTagName("body")[0];
+				var table = document.createElement("table");
+				var tbody = document.createElement("tbody");
+				
+
+				for (var row = 1; row <= xSize; row++){
+
+					var trow = document.createElement("tr");
+					trow.setAttribute('id', row);
+					for (var col = 1; col <= ySize; col++){
+						var td = document.createElement('td');
+						td.setAttribute('row', row);
+						td.setAttribute('col', col);
+						var tdtext = document.createTextNode(" ");
+						td.appendChild(tdtext);
+						trow.appendChild(td);
+
+					}
+					tbody.appendChild(trow);
+				}
+				table.appendChild(tbody);
+				body.appendChild(table);
+
+			})(42, 39);
+
+			$('tr[id = "1"], tr[id = "2"]').hide();
+			
+
+			$('input').click(function(){
+				$(this).hide();
+				runGame();
+			});
+				var COL = 39;
+				var ROW = 42;
+				var HIDDEN_ROWS = 2;
+				var GAMEOVER = false;
+				
+
+			function runGame(){
+				var currentTile;
+				var COL_POSITION = 17;
+				var ROW_POSITION = 3;
+				currentTile = getTile();
+				
+				
+					setInterval(function(){
+						
+						if(hasMove(ROW_POSITION, COL_POSITION)){
+						    
+							fadeTile(currentTile, ROW_POSITION -1 , COL_POSITION);
+							drawTile(currentTile, ROW_POSITION, COL_POSITION);
+							$('html').keypress(function(event){
+								
+							if(event.which == 40){
+								ROW_POSITION ++;
+							}
+							else if(event.which == 37){
+								COL_POSITION --;
+							}
+							else if(event.which == 39){
+								COL_POSITION ++;
+							}
+							else
+								ROW_POSITION ++;
+							});
+							ROW_POSITION ++;
+							
+						}
+						else
+							clearInterval();
+						    
+							
+					}, 200);
+					
+				i	
+				
+				
+				
+			}
+			
+			function hasMove(ROW_POSITION, COL_POSITION){
+				if (COL_POSITION >= 1 && COL_POSITION + 2 <= COL && ROW_POSITION <= (ROW -HIDDEN_ROWS)) {
+					return true;
+				}
+				else 
+					return false;
+			}
+			function fadeTile(tile, row_pos, col_pos){
+				
+				for (var i in tile.shape){
+
+					if (Boolean(tile.shape[i]) == true){
+						
+						var col = col_pos + (i % 3);
+						console.log(row_pos + ',' + col );
+						$('td[row = ' + row_pos + '][col =' + col + ']').css('background-color', '#575760');
+					}
+					
+					if (i % 3 == 2){
+						++ row_pos;
+						
+					}
+				}
+				
+			}
+			function drawTile(tile, row_pos, col_pos){
+
+				
+				
+				for (var i in tile.shape){
+
+					if (Boolean(tile.shape[i]) == true){
+						
+						var col = col_pos + (i % 3);
+						console.log(row_pos + ',' + col );
+						$('td[row = ' + row_pos + '][col =' + col + ']').css('background-color', tile.color);
+					}
+					
+					if (i % 3 == 2){
+						++ row_pos;
+						
+					}
+				}
+				
+			}
+			function getTile(sync){
+				var tile;
+				$.ajax({
+					url:'getTile',
+					type: 'get',
+					async:false,
+					converters: {
+						'text json': function(result){
+							return JSON.parse(result);
+
+						}
+					},	
+					
+					error: function(jaHTP, status, err){
+						alert(status);
+					}
+				}).done(function(data){
+					console.log(data);
+					tile = data;
+				});
+				return tile;
+				
+			}
+
+
+		</script>
+	</body>
+</html>
